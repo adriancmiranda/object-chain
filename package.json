@@ -2,7 +2,7 @@
   "name": "object-chain",
   "version": "1.0.0",
   "author": "Adrian C. Miranda",
-  "description": "",
+  "description": "Create objects with chainable properties",
   "main": "index.js",
   "unpkg": "index.js",
   "module": "index.next.js",
