@@ -12,7 +12,8 @@ export default (rules, middleware) => {
 	function applyRules() {
 		const pattern = this.rules.reduce((acc, rule) => {
 			if (callable(rules[rule])) {
-				const result = apply(rules[rule], this, [acc].concat(slice(this.args[rule])));
+        const args = slice(this.args[rule]);
+				const result = apply(rules[rule], this, [acc].concat(args));
 				if (string(result)) acc += result;
 				else return result;
 			} else {
