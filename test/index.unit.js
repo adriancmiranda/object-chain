@@ -4,7 +4,7 @@ import chain from '../index.next';
 const match = chain({
   beginningOfInput: '^',
   endOfInput: '$',
-  anySingleCharacterExceptTheNewlineCharacter: '.',
+  anySingleCharExceptTheNewline: '.',
   zeroOrMoreTimes: '*',
   oneOrMoreTimes: '+',
   zeroOrOneTime: '?',

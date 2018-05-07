@@ -3,7 +3,7 @@ const chain = require('object-chain');
 const match = chain({
   beginningOfInput: '^',
   endOfInput: '$',
-  anySingleCharacterExceptTheNewlineCharacter: '.',
+  anySingleCharExceptTheNewline: '.',
   zeroOrMoreTimes: '*',
   oneOrMoreTimes: '+',
   zeroOrOneTime: '?',

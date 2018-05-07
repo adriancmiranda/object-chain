@@ -8,7 +8,7 @@
  *                       
  * ~~ object-chain v1.0.1
  * 
- * @moment Monday, May 7, 2018 7:20 AM
+ * @moment Monday, May 7, 2018 7:30 AM
  * @homepage https://github.com/adriancmiranda/object-chain#readme
  * @author Adrian C. Miranda
  * @license (c) 2017-2021
