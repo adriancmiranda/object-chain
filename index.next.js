@@ -9,12 +9,19 @@ const defineProps = Object.defineProperties;
 const create = Object.create;
 const keys = Object.keys;
 
+function processArgs(args, initialValue) {
+  return arrayFrom(args).reduce((acc, arg, i) => {
+    acc[acc.length] = callable(arg) ? arg() : arg;
+    return acc;
+  }, initialValue);
+}
+
 export default (rules, middleware) => {
   function applyRules() {
     const pattern = this.rules.reduce((acc, rule, index) => {
       if (callable(rules[rule])) {
-        const args = arrayFrom(this.args[`${rule}${index}`]);
-        const result = apply(rules[rule], this, [acc].concat(args));
+        const args = processArgs(this.args[`${rule}${index}`], [acc]);
+        const result = apply(rules[rule], this, args);
         if (string(result)) acc += result;
         else return result;
       } else {
