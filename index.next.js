@@ -3,7 +3,7 @@ import string from 'describe-type/source/is/string.js';
 import undef from 'describe-type/source/is/undef.js';
 import apply from 'describe-type/source/@/apply.js';
 
-const slice = Function.call.bind(Array.prototype.slice);
+const arrayFrom = Array.from;
 const setPrototypeOf = Object.setPrototypeOf;
 const defineProps = Object.defineProperties;
 const create = Object.create;
@@ -13,7 +13,7 @@ export default (rules, middleware) => {
   function applyRules() {
     const pattern = this.rules.reduce((acc, rule, index) => {
       if (callable(rules[rule])) {
-        const args = slice(this.args[`${rule}${index}`]);
+        const args = arrayFrom(this.args[`${rule}${index}`]);
         const result = apply(rules[rule], this, [acc].concat(args));
         if (string(result)) acc += result;
         else return result;
