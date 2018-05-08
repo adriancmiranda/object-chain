@@ -4,9 +4,9 @@
 # Usage
 
 ```js
-const chain = require('object-chain');
+const objectChain = require('object-chain');
 
-const match = chain({
+const match = objectChain({
   beginningOfInput: '^',
   endOfInput: '$',
   anySingleCharExceptTheNewline: '.',
@@ -14,7 +14,7 @@ const match = chain({
   oneOrMoreTimes: '+',
   zeroOrOneTime: '?',
   or: '|',
-  escape: '\\',
+  escapeChar: '\\',
   backslash: '\\',
   backspace: '\\b',
   nonWordBoundary: '\\B',
@@ -29,8 +29,12 @@ const match = chain({
   alphanumericChar: '\\w',
   nonWordChar: '\\W',
   nil: '\\0',
-  varchar: '[$0-9A-Za-z_\\s]',
-  pathchar: '[@$0-9a-zA-Z_\\s-.\\/]',
+  lowerCase: '[a-z]',
+  upperCase: '[A-Z]',
+  letter: '[a-zA-Z]',
+  number: '[0-9]',
+  varChar: '[$0-9A-Za-z_\\s]',
+  pathChar: '[@$0-9a-zA-Z_\\s-.\\/]',
   value: (self, value) => value,
   controlChar: (self, value) => `\\c${value}`,
   notRemember: (self, value) => `(?:${value})`,
