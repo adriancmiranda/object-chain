@@ -3,7 +3,7 @@ const commonjs = require('rollup-plugin-commonjs');
 const optimizeJs = require('rollup-plugin-optimize-js');
 const filesize = require('rollup-plugin-filesize');
 const uglify = require('rollup-plugin-uglify');
-const babel = require('rollup-plugin-babel');
+const buble = require('rollup-plugin-buble');
 const { minify } = require('uglify-es');
 const { env, flag } = require('../config');
 const targets = require('./targets');
@@ -14,7 +14,7 @@ module.exports = file => ({
   input: file.source,
   output: targets.parseOutput(file),
   plugins: [
-    babel({ plugins: ['@babel/plugin-external-helpers'] }),
+    buble(),
     nodeResolve({ jsnext: true, main: true, browser: !targets.hasFormat(file, 'cjs') }),
     commonjs(),
   ].concat(file.plugins || []).concat(env.MINIFY ? [

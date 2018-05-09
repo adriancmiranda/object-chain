@@ -5,7 +5,7 @@ const defaultFormats = ['umd'];
 
 const target = (name, outputPath, format) => ({
   sourcemap: env.MINIFY,
-  file: `${outputPath}.${format}${env.MINIFY ? '.min' : ''}.js`,
+  file: `${outputPath}${env.USE_FILE_FORMAT ? `.${format}` : ''}${env.MINIFY ? '.min' : ''}.js`,
   banner: env.SIGN ? flag : '',
   indent: env.INDENT,
   format,
