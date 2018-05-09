@@ -9,14 +9,14 @@ const defineProps = Object.defineProperties;
 const create = Object.create;
 const keys = Object.keys;
 
-function processArgs(args, initialValue) {
-  return arrayFrom(args).reduce((acc, arg, i) => {
+const processArgs = (args, initialValue) => (
+  arrayFrom(args).reduce((acc, arg, i) => {
     acc[acc.length] = callable(arg) ? arg() : arg;
     return acc;
-  }, initialValue);
-}
+  }, initialValue)
+);
 
-export default (rules, middleware) => {
+const transform = (rules, middleware) => {
   function applyRules() {
     const pattern = this.rules.reduce((acc, rule, index) => {
       if (callable(rules[rule])) {
@@ -62,3 +62,5 @@ export default (rules, middleware) => {
     return acc;
   }, create(null)));
 };
+
+export default transform;

@@ -1,3 +1,4 @@
+const { as, is } = require('describe-type');
 const { env, flag } = require('../config');
 
 const defaultFormats = ['umd'];
@@ -12,8 +13,8 @@ const target = (name, outputPath, format) => ({
 });
 
 exports.parseFormats = ({ formats }) => {
-  formats = typeof formats === 'string' ? [formats] : formats;
-  formats = Array.isArray(formats) ? formats : defaultFormats;
+  formats = is.string(formats) ? [formats] : formats;
+  formats = as(Array, formats, defaultFormats);
   return formats;
 };
 

@@ -1,9 +1,11 @@
+const { is } = require('describe-type');
+
 const create = Object.create;
 const keys = Object.keys;
 
 exports.param = key => {
   const multi = /,/;
-  if ((typeof key === 'string' || key instanceof String) && multi.test(key)) {
+  if (is.string(key) && multi.test(key)) {
     key = key.split(multi);
   }
   if (/^false$/i.test(key)) {
@@ -19,9 +21,8 @@ exports.param = key => {
 };
 
 exports.params = env => {
-  const params = create(null);
-  keys(env || '').forEach(key => {
+  return keys(env || '').reduce((params, key) => {
     params[key] = exports.param(env[key]);
-  });
-  return params;
+    return params;
+  }, create(null));
 };

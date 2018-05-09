@@ -1,17 +1,172 @@
 /*!
- *    /     '      /  / 
- *   /__      ___ (  /   
- *   \--`-'-|`---\ |  
- *    |' _/   ` __/ /   
- *    '._  W    ,--'   
- *       |_:_._/         
- *                       
+ *    /     '      /  /
+ *   /__      ___ (  /
+ *   \--`-'-|`---\ |
+ *    |' _/   ` __/ /
+ *    '._  W    ,--'
+ *       |_:_._/
+ *
  * ~~ object-chain v1.0.3
- * 
- * @moment Tuesday, May 8, 2018 6:22 PM
+ *
+ * @moment Tuesday, May 8, 2018 6:50 PM
  * @homepage https://github.com/adriancmiranda/object-chain#readme
  * @author Adrian C. Miranda
  * @license (c) 2017-2021
  */
-!(function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):t.objectChain=e()})(this,(function(){"use strict";function t(t){return"function"==typeof t}function e(t){return"string"==typeof t||t instanceof String}function n(t){return (function(t){return null!=t&&t.constructor===Array})(t)||e(t)||!!t&&"object"==typeof t&&"number"==typeof t.length&&(0===t.length||t.length>0&&t.length-1 in t)}function r(t,e,r,c){try{const u=n(r)?r:[];switch(u.length){case 0:return t.call(e);case 1:return t.call(e,u[0]);case 2:return t.call(e,u[0],u[1]);case 3:return t.call(e,u[0],u[1],u[2]);case 4:return t.call(e,u[0],u[1],u[2],u[3]);case 5:return t.call(e,u[0],u[1],u[2],u[3],u[4]);case 6:return t.call(e,u[0],u[1],u[2],u[3],u[4],u[5]);case 7:return t.call(e,u[0],u[1],u[2],u[3],u[4],u[5],u[6]);case 8:return t.call(e,u[0],u[1],u[2],u[3],u[4],u[5],u[6],u[7]);case 9:return t.call(e,u[0],u[1],u[2],u[3],u[4],u[5],u[6],u[7],u[8]);default:return t.apply(e,u)}}catch(t){if(c)return t;throw t}}const c=Array.from,u=Object.setPrototypeOf,s=Object.defineProperties,i=Object.create,o=Object.keys;return(n,l)=>{function a(){const u=this.rules.reduce((u,s,o)=>{if(t(n[s])){const l=(l=this.args[`${s}${o}`],i=[u],c(l).reduce((e,n,r)=>(e[e.length]=t(n)?n():n,e),i)),a=r(n[s],this,l);if(!e(a))return a;u+=a}else u+=n[s];return u},"");var s,i;return l?r(l,this,[u,arguments],!0):u}function f(t,e,n){function c(){return r(a,c,arguments)}return c.rules=t,c.args=e,c.index=n,u(c,d),c}const h=o(n).reduce((e,r,c)=>{const u=t(n[r]);return e[r]={[u?"value":"get"]:function(){return this.index+=1,u&&(this.args[`${r}${this.index}`]=arguments),f(this.rules.concat(r),this.args,this.index)}},e},i(null)),d=s((function(){}),h);return s({rules:n},o(h).reduce((e,r,c)=>{const u=t(n[r]);return e[r]={[u?"value":"get"]:function(){return void 0===this.args&&(this.args=arguments),u&&(this.args[`${r}0`]=arguments),f([r],this.args,0)}},e},i(null)))}}));
-//# sourceMappingURL=index.js.map
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.objectChain = factory());
+}(this, (function () { 'use strict';
+
+	/**
+	 *
+	 * @function
+	 * @memberof is
+	 * @param {any} value
+	 * @returns {Boolean}
+	 */
+	function callable(value) {
+		return typeof value === 'function';
+	}
+
+	/**
+	 *
+	 * @function
+	 * @memberof is
+	 * @param {any} value
+	 * @returns {Boolean}
+	 */
+	function string(value) {
+		return typeof value === 'string' || value instanceof String;
+	}
+
+	/**
+	 *
+	 * @function
+	 * @memberof is
+	 * @param {any}
+	 * @returns {Boolean}
+	 */
+	function undef(value) {
+		return value === undefined;
+	}
+
+	/**
+	 *
+	 * @function
+	 * @memberof is
+	 * @param {any} value
+	 * @returns {Boolean}
+	 */
+	function array(value) {
+		if (value == null) return false;
+		return value.constructor === Array;
+	}
+
+	/**
+	 *
+	 * @function
+	 * @memberof is
+	 * @param {any} value
+	 * @returns {Boolean}
+	 */
+	function arraylike(value) {
+		return array(value) || string(value) || (
+			(!!value && typeof value === 'object' && typeof value.length === 'number') &&
+			(value.length === 0 || (value.length > 0 && (value.length - 1) in value))
+		);
+	}
+
+	/**
+	 *
+	 * @param {Function} cmd - .
+	 * @param {any} context - .
+	 * @returns {any}
+	 */
+	function apply(cmd, context, args, blindly) {
+		try {
+			const $ = arraylike(args) ? args : [];
+			switch ($.length) {
+				case 0: return cmd.call(context);
+				case 1: return cmd.call(context, $[0]);
+				case 2: return cmd.call(context, $[0], $[1]);
+				case 3: return cmd.call(context, $[0], $[1], $[2]);
+				case 4: return cmd.call(context, $[0], $[1], $[2], $[3]);
+				case 5: return cmd.call(context, $[0], $[1], $[2], $[3], $[4]);
+				case 6: return cmd.call(context, $[0], $[1], $[2], $[3], $[4], $[5]);
+				case 7: return cmd.call(context, $[0], $[1], $[2], $[3], $[4], $[5], $[6]);
+				case 8: return cmd.call(context, $[0], $[1], $[2], $[3], $[4], $[5], $[6], $[7]);
+				case 9: return cmd.call(context, $[0], $[1], $[2], $[3], $[4], $[5], $[6], $[7], $[8]);
+				default: return cmd.apply(context, $);
+			}
+		} catch (err) {
+			if (blindly) return err;
+			throw err;
+		}
+	}
+
+	const arrayFrom = Array.from;
+	const setPrototypeOf = Object.setPrototypeOf;
+	const defineProps = Object.defineProperties;
+	const create = Object.create;
+	const keys = Object.keys;
+
+	function processArgs(args, initialValue) {
+		return arrayFrom(args).reduce((acc, arg, i) => {
+			acc[acc.length] = callable(arg) ? arg() : arg;
+			return acc;
+		}, initialValue);
+	}
+
+	var transform = ((rules, middleware) => {
+		function applyRules() {
+			const pattern = this.rules.reduce((acc, rule, index) => {
+				if (callable(rules[rule])) {
+					const args = processArgs(this.args[`${rule}${index}`], [acc]);
+					const result = apply(rules[rule], this, args);
+					if (string(result)) acc += result;else return result;
+				} else {
+					acc += rules[rule];
+				}
+				return acc;
+			}, '');
+			return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
+		}
+
+		function build(rules, args, index) {
+			function builder() {
+				return apply(applyRules, builder, arguments);
+			}
+			builder.rules = rules;
+			builder.args = args;
+			builder.index = index;
+			setPrototypeOf(builder, proto);
+			return builder;
+		}
+
+		const expressions = keys(rules).reduce((acc, rule, index) => {
+			const isfn = callable(rules[rule]);
+			acc[rule] = { [isfn ? 'value' : 'get']: function append() {
+					this.index += 1;
+					if (isfn) this.args[`${rule}${this.index}`] = arguments;
+					return build(this.rules.concat(rule), this.args, this.index);
+				} };
+			return acc;
+		}, create(null));
+
+		const proto = defineProps(function match() {}, expressions);
+		return defineProps({ rules }, keys(expressions).reduce((acc, rule, index) => {
+			const isfn = callable(rules[rule]);
+			acc[rule] = { [isfn ? 'value' : 'get']: function append() {
+					if (undef(this.args)) this.args = arguments;
+					if (isfn) this.args[`${rule}${0}`] = arguments;
+					return build([rule], this.args, 0);
+				} };
+			return acc;
+		}, create(null)));
+	});
+
+	return transform;
+
+})));
