@@ -2,6 +2,7 @@
 > Create objects with chainable properties
 
 # Usage
+> [_playground_](https://npm.runkit.com/object-chain)
 
 ```js
 const objectChain = require('object-chain');
