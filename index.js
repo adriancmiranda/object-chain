@@ -8,8 +8,8 @@
  *                       
  * ~~ object-chain v1.0.3
  * 
- * @commit b2a259b7d53ba3abd0a4b36a933b5c112b8a8941
- * @moment Wednesday, May 9, 2018 6:51 PM
+ * @commit 10aadb84f63fcb04b78392c36865390c5c30c37a
+ * @moment Wednesday, May 9, 2018 10:47 PM
  * @homepage https://github.com/adriancmiranda/object-chain#readme
  * @author Adrian C. Miranda
  * @license (c) 2016-2021 Adrian C. Miranda
@@ -40,17 +40,6 @@
 	 */
 	function string(value) {
 		return typeof value === 'string' || value instanceof String;
-	}
-
-	/**
-	 *
-	 * @function
-	 * @memberof is
-	 * @param {any}
-	 * @returns {Boolean}
-	 */
-	function undef(value) {
-		return value === undefined;
 	}
 
 	/**
@@ -107,70 +96,64 @@
 		}
 	}
 
-	var arrayFrom = Array.from;
 	var setPrototypeOf = Object.setPrototypeOf;
-	var defineProps = Object.defineProperties;
+	var defineProperties = Object.defineProperties;
 	var create = Object.create;
 	var keys = Object.keys;
+	var arrayFrom = Array.from;
 
 	var processArgs = function (args, initialValue) { return (
-	  arrayFrom(args).reduce(function (acc, arg, i) {
-	    acc[acc.length] = callable(arg) ? arg() : arg;
-	    return acc;
-	  }, initialValue)
+		arrayFrom(args).reduce(function (acc, arg) {
+			acc[acc.length] = callable(arg) ? arg() : arg;
+			return acc;
+		}, initialValue)
 	); };
 
-	var transform = function (rules, middleware) {
-	  function applyRules() {
-	    var this$1 = this;
+	var transform = function (object, middleware) {
+		function chain() {
+			var this$1 = this;
 
-	    var pattern = this.rules.reduce(function (acc, rule, index) {
-	      if (callable(rules[rule])) {
-	        var args = processArgs(this$1.args[("" + rule + index)], [acc]);
-	        var result = apply(rules[rule], this$1, args);
-	        if (string(result)) { acc += result; }
-	        else { return result; }
-	      } else {
-	        acc += rules[rule];
-	      }
-	      return acc;
-	    }, '');
-	    return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
-	  }
+			var pattern = this.object.reduce(function (acc, item) {
+				if (callable(object[item.name])) {
+					var args = processArgs(item.args, [acc]);
+					var result = apply(object[item.name], this$1, args);
+					if (string(result)) { acc += result; }
+					else { return result; }
+				} else {
+					acc += object[item.name];
+				}
+				return acc;
+			}, '');
+			return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
+		}
 
-	  function build(rules, args, index) {
-	    function builder() { return apply(applyRules, builder, arguments); }
-	    builder.rules = rules;
-	    builder.args = args;
-	    builder.index = index;
-	    setPrototypeOf(builder, proto);
-	    return builder;
-	  }
+		function connect(data) {
+			function link() { return apply(chain, link, arguments); }
+			link.object = data;
+			setPrototypeOf(link, proto);
+			return link;
+		}
 
-	  var expressions = keys(rules).reduce(function (acc, rule, index) {
-	    var obj;
+		var descriptors = keys(object).reduce(function (acc, name) {
+			var obj;
 
-	    var isfn = callable(rules[rule]);
-	    acc[rule] = ( obj = {}, obj[isfn ? 'value' : 'get'] = function append() {
-	      this.index += 1;
-	      if (isfn) { this.args[("" + rule + (this.index))] = arguments; }
-	      return build(this.rules.concat(rule), this.args, this.index);
-	    }, obj );
-	    return acc;
-	  }, create(null));
+			var isfn = callable(object[name]);
+			acc[name] = ( obj = {}, obj[isfn ? 'value' : 'get'] = function connector() {
+					return connect(this.object.concat({ name: name, args: arguments }));
+				}, obj );
+			return acc;
+		}, create(null));
 
-	  var proto = defineProps(function match() {}, expressions);
-	  return defineProps({ rules: rules }, keys(expressions).reduce(function (acc, rule, index) {
-	    var obj;
+		var proto = defineProperties(function ObjectChain() {}, descriptors);
+		return defineProperties({ object: object }, keys(descriptors).reduce(function (acc, name) {
+			var obj;
 
-	    var isfn = callable(rules[rule]);
-	    acc[rule] = ( obj = {}, obj[isfn ? 'value' : 'get'] = function append() {
-	      if (undef(this.args)) { this.args = arguments; }
-	      if (isfn) { this.args[("" + rule + (0))] = arguments; }
-	      return build([rule], this.args, 0);
-	    }, obj );
-	    return acc;
-	  }, create(null)));
+			var isfn = callable(object[name]);
+			acc[name] = ( obj = {}, obj[isfn ? 'value' : 'get'] = function startup() {
+					return connect([{ name: name, args: arguments }]);
+				}, obj );
+			return acc;
+		}, create(null)));
 	};
 
 	return transform;

@@ -18,7 +18,7 @@
     "build:concat": "npm run unbuild && npm run rollup -- --environment=SIGN,INDENT,NODE_ENV:production",
     "build": "run-s build:concat build:minify",
     "dev": "npm test -- --no-cache --watch",
-    "lint": "eslint --ext .js index.js cli.js register.js parse-argv.js",
+    "lint": "eslint --ext .js index.next.js",
     "precommit": "run-s lint test",
     "commitmsg": "validate-commit-msg",
     "prerelease": "npm test",
@@ -78,6 +78,8 @@
   "files": [
     "example",
     "index.js",
+    "index.min.js",
+    "index.min.js.map",
     "index.next.js",
     "LICENSE",
     "README.md"

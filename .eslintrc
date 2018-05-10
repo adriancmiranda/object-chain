@@ -15,6 +15,11 @@ rules:
   no-multi-assign: off
   no-param-reassign: off
   no-tabs: off
+  prefer-arrow-callback: off
+  object-curly-newline: off
+  no-use-before-define: off
+  prefer-rest-params: off
+  import/extensions: off
 
   comma-dangle:
     - warn
