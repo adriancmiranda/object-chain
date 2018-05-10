@@ -33,7 +33,7 @@ const match = objectChain({
   upperCase: '[A-Z]',
   letter: '[a-zA-Z]',
   number: '[0-9]',
-  varChar: '[$0-9A-Za-z_\\s]',
+  varchar: '[$0-9A-Za-z_\\s]',
   pathChar: '[@$0-9a-zA-Z_\\s-.\\/]',
   value: (self, value) => value,
   controlChar: (self, value) => `\\c${value}`,
