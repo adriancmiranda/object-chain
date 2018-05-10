@@ -10,54 +10,48 @@ const create = Object.create;
 const keys = Object.keys;
 
 const processArgs = (args, initialValue) => (
-  arrayFrom(args).reduce((acc, arg, i) => {
+  arrayFrom(args).reduce((acc, arg) => {
     acc[acc.length] = callable(arg) ? arg() : arg;
     return acc;
   }, initialValue)
 );
 
-const transform = (rules, middleware) => {
-  function applyRules() {
-    const pattern = this.rules.reduce((acc, rule, index) => {
-      if (callable(rules[rule])) {
-        const args = processArgs(this.args[`${rule}${index}`], [acc]);
-        const result = apply(rules[rule], this, args);
+const transform = (object, middleware) => {
+  function chain() {
+    const pattern = this.object.reduce((acc, item, index) => {
+      if (callable(object[item.name])) {
+        const args = processArgs(item.args, [acc]);
+        const result = apply(object[item.name], this, args);
         if (string(result)) acc += result;
         else return result;
       } else {
-        acc += rules[rule];
+        acc += object[item.name];
       }
       return acc;
     }, '');
     return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
   }
 
-  function build(rules, args, index) {
-    function builder() { return apply(applyRules, builder, arguments); }
-    builder.rules = rules;
-    builder.args = args;
-    builder.index = index;
-    setPrototypeOf(builder, proto);
-    return builder;
+  function connect(object) {
+    function link() { return apply(chain, link, arguments); }
+    link.object = object;
+    setPrototypeOf(link, proto);
+    return link;
   }
 
-  const expressions = keys(rules).reduce((acc, rule, index) => {
-    const isfn = callable(rules[rule]);
-    acc[rule] = { [isfn ? 'value' : 'get']: function append() {
-      this.index += 1;
-      if (isfn) this.args[`${rule}${this.index}`] = arguments;
-      return build(this.rules.concat(rule), this.args, this.index);
+  const expressions = keys(object).reduce((acc, name) => {
+    const isfn = callable(object[name]);
+    acc[name] = { [isfn ? 'value' : 'get']: function append() {
+      return connect(this.object.concat({ name, args: arguments }));
     }};
     return acc;
   }, create(null));
 
   const proto = defineProps(function match() {}, expressions);
-  return defineProps({ rules }, keys(expressions).reduce((acc, rule, index) => {
-    const isfn = callable(rules[rule]);
-    acc[rule] = { [isfn ? 'value' : 'get']: function append() {
-      if (undef(this.args)) this.args = arguments;
-      if (isfn) this.args[`${rule}${0}`] = arguments;
-      return build([rule], this.args, 0);
+  return defineProps({ object }, keys(expressions).reduce((acc, name) => {
+    const isfn = callable(object[name]);
+    acc[name] = { [isfn ? 'value' : 'get']: function append() {
+      return connect([{ name, args: arguments }]);
     }};
     return acc;
   }, create(null)));

@@ -41,6 +41,7 @@ Session.vim
 .*
 !.bin/
 !.eslintrc*
+!.babelrc
 !.editorconfig
 !.gitattributes
 !.gitignore

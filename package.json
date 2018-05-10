@@ -13,13 +13,11 @@
     "upgrade": "npm-check -uEy",
     "test": "cross-env NODE_ENV=test ava test/*.unit.js --color",
     "rollup": "rollup -c .bin/index.js",
-    "rollup:watch": "npm run rollup -- -w --environment=NODE_ENV:development",
     "unbuild": "rimraf dist/*.{js,map,gz}",
     "build:minify": "npm run rollup -- --environment=SIGN,MINIFY,NODE_ENV:production",
     "build:concat": "npm run unbuild && npm run rollup -- --environment=SIGN,INDENT,NODE_ENV:production",
     "build": "run-s build:concat build:minify",
-    "dev": "npm run watch",
-    "watch": "npm test -- --no-cache --watch",
+    "dev": "npm test -- --no-cache --watch",
     "lint": "eslint --ext .js index.js cli.js register.js parse-argv.js",
     "precommit": "run-s lint test",
     "commitmsg": "validate-commit-msg",
@@ -70,12 +68,7 @@
   "ava": {
     "require": [
       "./.bin/ava/babel-register.js"
-    ],
-    "babel": {
-      "testOptions": {
-        "babelrc": false
-      }
-    }
+    ]
   },
   "config": {
     "validate-commit-msg": {
