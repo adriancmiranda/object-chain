@@ -1,5 +1,4 @@
 import callable from 'describe-type/source/is/callable.js';
-import string from 'describe-type/source/is/string.js';
 import apply from 'describe-type/source/@/apply.js';
 
 const { setPrototypeOf, defineProperties, create, keys } = Object;
@@ -17,9 +16,7 @@ const transform = (object, middleware) => {
 		const pattern = this.object.reduce((acc, item) => {
 			if (callable(object[item.name])) {
 				const args = processArgs(item.args, [acc]);
-				const result = apply(object[item.name], this, args);
-				if (string(result)) acc += result;
-				else return result;
+				acc = apply(object[item.name], this, args);
 			} else {
 				acc += object[item.name];
 			}

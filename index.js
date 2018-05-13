@@ -6,10 +6,10 @@
  *    '._  W    ,--'   
  *       |_:_._/         
  *                       
- * ~~ object-chain v1.0.3
+ * ~~ object-chain v1.0.4
  * 
- * @commit 10aadb84f63fcb04b78392c36865390c5c30c37a
- * @moment Wednesday, May 9, 2018 10:47 PM
+ * @commit 19ad40bd18a1a6ee9c19288d236059b7a18f3482
+ * @moment Saturday, May 12, 2018 9:49 PM
  * @homepage https://github.com/adriancmiranda/object-chain#readme
  * @author Adrian C. Miranda
  * @license (c) 2016-2021 Adrian C. Miranda
@@ -38,8 +38,9 @@
 	 * @param {any} value
 	 * @returns {Boolean}
 	 */
-	function string(value) {
-		return typeof value === 'string' || value instanceof String;
+	function array(value) {
+		if (value == null) { return false; }
+		return value.constructor === Array;
 	}
 
 	/**
@@ -49,9 +50,8 @@
 	 * @param {any} value
 	 * @returns {Boolean}
 	 */
-	function array(value) {
-		if (value == null) { return false; }
-		return value.constructor === Array;
+	function string(value) {
+		return typeof value === 'string' || value instanceof String;
 	}
 
 	/**
@@ -116,9 +116,7 @@
 			var pattern = this.object.reduce(function (acc, item) {
 				if (callable(object[item.name])) {
 					var args = processArgs(item.args, [acc]);
-					var result = apply(object[item.name], this$1, args);
-					if (string(result)) { acc += result; }
-					else { return result; }
+					acc = apply(object[item.name], this$1, args);
 				} else {
 					acc += object[item.name];
 				}
