@@ -6,10 +6,10 @@
  *    '._  W    ,--'   
  *       |_:_._/         
  *                       
- * ~~ object-chain v1.0.4
+ * ~~ object-chain v1.1.0
  * 
- * @commit 19ad40bd18a1a6ee9c19288d236059b7a18f3482
- * @moment Saturday, May 12, 2018 9:49 PM
+ * @commit 769c8592e66203968b9d5a6dd68c879ed731e9a7
+ * @moment Saturday, May 12, 2018 11:54 PM
  * @homepage https://github.com/adriancmiranda/object-chain#readme
  * @author Adrian C. Miranda
  * @license (c) 2016-2021 Adrian C. Miranda
@@ -113,15 +113,18 @@
 		function chain() {
 			var this$1 = this;
 
+			var last = '';
 			var pattern = this.object.reduce(function (acc, item) {
 				if (callable(object[item.name])) {
-					var args = processArgs(item.args, [acc]);
+					var args = processArgs(item.args, [acc, last]);
 					acc = apply(object[item.name], this$1, args);
+					last = acc;
 				} else {
 					acc += object[item.name];
+					last = object[item.name];
 				}
 				return acc;
-			}, '');
+			}, last);
 			return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
 		}
 

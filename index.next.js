@@ -13,15 +13,18 @@ const processArgs = (args, initialValue) => (
 
 const transform = (object, middleware) => {
 	function chain() {
+		let last = '';
 		const pattern = this.object.reduce((acc, item) => {
 			if (callable(object[item.name])) {
-				const args = processArgs(item.args, [acc]);
+				const args = processArgs(item.args, [acc, last]);
 				acc = apply(object[item.name], this, args);
+				last = acc;
 			} else {
 				acc += object[item.name];
+				last = object[item.name];
 			}
 			return acc;
-		}, '');
+		}, last);
 		return middleware ? apply(middleware, this, [pattern, arguments], true) : pattern;
 	}
 
