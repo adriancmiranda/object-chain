@@ -1,4 +1,6 @@
 # object-chain
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadriancmiranda%2Fobject-chain.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadriancmiranda%2Fobject-chain?ref=badge_shield)
+
 > Create objects with chainable properties
 
 # Usage
@@ -57,3 +59,7 @@ const rId = matchId();
 rId.test('abc');
 
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadriancmiranda%2Fobject-chain.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadriancmiranda%2Fobject-chain?ref=badge_large)
